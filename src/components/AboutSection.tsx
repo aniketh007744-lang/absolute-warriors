@@ -23,7 +23,9 @@ const AboutSection = () => (
           More Than a <span className="text-gradient">Gym</span>
         </h2>
         <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-          Absolute Warriors Gym in Barbil is where champions are forged. Our world-class facility offers 
+          Absolute Warrior's Fitness Center in Barbil is where champions are forged. Founded by{" "}
+          <span className="text-foreground font-semibold">Wasim Akhtar</span> &{" "}
+          <span className="text-foreground font-semibold">Anjali Mohanty</span>, our world-class facility offers 
           everything you need to transform your body and unleash your inner warrior.
         </p>
       </motion.div>
