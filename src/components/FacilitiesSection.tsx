@@ -2,22 +2,10 @@ import { motion } from "framer-motion";
 import { Dumbbell, Heart, Lock, PersonStanding, Bike, UserCheck } from "lucide-react";
 
 const facilities = [
-  {
-    icon: Dumbbell,
-    title: "Boys Gym",
-    floor: "Ground Floor",
-    desc: "Heavy weights, strength training, and powerlifting zone with premium equipment.",
-    accent: true,
-  },
-  {
-    icon: PersonStanding,
-    title: "Girls Gym",
-    floor: "Second Floor",
-    desc: "Safe, private, and comfortable environment designed exclusively for women.",
-    accent: true,
-  },
+  { icon: Dumbbell, title: "Boys Gym", floor: "Ground Floor", desc: "Heavy weights, strength training, and powerlifting zone with premium equipment.", accent: true },
+  { icon: PersonStanding, title: "Girls Gym", floor: "Second Floor", desc: "Safe, private, and comfortable environment designed exclusively for women.", accent: true },
   { icon: Bike, title: "Cardio Zone", floor: "Both Floors", desc: "Treadmills, cycling, ellipticals and more for peak cardiovascular fitness." },
-  { icon: UserCheck, title: "Personal Training", floor: "All Floors", desc: "One-on-one expert guidance to maximize your results and reach goals faster." },
+  { icon: UserCheck, title: "Personal Training", floor: "By Wasim Akhtar", desc: "Certified fitness coach with expert one-on-one guidance to maximize your results." },
   { icon: Lock, title: "Locker Rooms", floor: "Each Floor", desc: "Secure, clean lockers with shower facilities for your convenience." },
   { icon: Heart, title: "Recovery Zone", floor: "Ground Floor", desc: "Stretching area and foam rolling station for post-workout recovery." },
 ];
