@@ -1,57 +1,129 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { User, CreditCard, Calendar, CheckCircle } from "lucide-react";
+import { User, CreditCard, CheckCircle, Calendar } from "lucide-react";
 
-const mockUser = {
-  name: "Rahul Sharma",
-  plan: "New Admission Offer",
-  status: "Active",
-  expiry: "April 30, 2026",
-  joined: "March 27, 2026",
-};
+export default function DashboardSection() {
+  const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-const cards = [
-  { icon: User, label: "Member", value: mockUser.name, color: "text-primary" },
-  { icon: CreditCard, label: "Plan", value: mockUser.plan, color: "text-primary" },
-  { icon: CheckCircle, label: "Status", value: mockUser.status, color: "text-green-500" },
-  { icon: Calendar, label: "Expires", value: mockUser.expiry, color: "text-primary" },
-];
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const token = localStorage.getItem("token");
 
-const DashboardSection = () => (
-  <section id="dashboard" className="py-24 bg-secondary/30">
-    <div className="container mx-auto px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-12"
-      >
-        <p className="font-display text-sm tracking-[0.3em] uppercase text-primary mb-3">Member Area</p>
-        <h2 className="font-display text-4xl md:text-5xl font-bold uppercase">
-          Your <span className="text-gradient">Dashboard</span>
-        </h2>
-        <p className="text-muted-foreground mt-3">Preview of the member dashboard experience</p>
-      </motion.div>
+    // ❌ Not logged in
+    if (!user || !token) {
+      setError("Not logged in");
+      setLoading(false);
+      return;
+    }
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-        {cards.map((card, i) => (
-          <motion.div
-            key={card.label}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-            whileHover={{ y: -5, scale: 1.02 }}
-            className="bg-card border border-border rounded-xl p-6 hover:border-primary/40 transition-all duration-300"
-          >
-            <card.icon className={`${card.color} mb-3`} size={28} />
-            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{card.label}</p>
-            <p className="font-display text-lg font-semibold">{card.value}</p>
-          </motion.div>
-        ))}
+    fetch(`http://localhost:5000/user/${user.id}`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || "Error fetching user");
+        }
+
+        return data;
+      })
+      .then((data) => {
+        console.log("USER DATA:", data); // ✅ DEBUG
+        setUserData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("ERROR:", err.message);
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  // 🔄 LOADING
+  if (loading) {
+    return (
+      <div className="text-white text-center py-20">
+        Loading dashboard...
       </div>
-    </div>
-  </section>
-);
+    );
+  }
 
-export default DashboardSection;
+  // ❌ ERROR STATE (VERY IMPORTANT)
+  if (error) {
+    return (
+      <div className="text-red-500 text-center py-20">
+        ❌ {error}
+      </div>
+    );
+  }
+
+  return (
+    <section className="py-20 bg-black text-white">
+      <div className="container mx-auto px-4 text-center">
+
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-4xl font-bold mb-4"
+        >
+          YOUR <span className="text-red-500">DASHBOARD</span>
+        </motion.h2>
+
+        <p className="text-gray-400 mb-12">
+          Your membership details
+        </p>
+
+        <div className="grid md:grid-cols-4 gap-6">
+
+          {/* NAME */}
+          <div className="bg-gray-900 p-6 rounded-xl">
+            <User className="text-red-500 mb-2" />
+            <p className="text-gray-400">Member</p>
+            <h3 className="font-bold">{userData?.name}</h3>
+          </div>
+
+          {/* PLAN */}
+          <div className="bg-gray-900 p-6 rounded-xl">
+            <CreditCard className="text-red-500 mb-2" />
+            <p className="text-gray-400">Plan</p>
+            <h3 className="font-bold">{userData?.plan || "No Plan"}</h3>
+          </div>
+
+          {/* STATUS */}
+          <div className="bg-gray-900 p-6 rounded-xl">
+            <CheckCircle
+              className={
+                userData?.paymentStatus === "Completed"
+                  ? "text-green-500 mb-2"
+                  : "text-yellow-500 mb-2"
+              }
+            />
+            <p className="text-gray-400">Status</p>
+            <h3 className="font-bold">
+              {userData?.paymentStatus === "Completed"
+                ? "Active"
+                : "Pending"}
+            </h3>
+          </div>
+
+          {/* EXPIRY */}
+          <div className="bg-gray-900 p-6 rounded-xl">
+            <Calendar className="text-red-500 mb-2" />
+            <p className="text-gray-400">Expires</p>
+            <h3 className="font-bold">
+              {userData?.paymentStatus === "Completed"
+                ? "1 Month from Today"
+                : "--"}
+            </h3>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}

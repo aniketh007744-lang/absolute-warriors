@@ -16,11 +16,28 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // 🔥 USER STATE
+  const [user, setUser] = useState<any>(null);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
+
+    // ✅ Load user from localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // 🔥 LOGOUT FUNCTION
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    window.location.reload();
+  };
 
   return (
     <motion.nav
@@ -28,10 +45,13 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/95 backdrop-blur-md shadow-lg shadow-primary/5" : "bg-transparent"
+        scrolled
+          ? "bg-background/95 backdrop-blur-md shadow-lg shadow-primary/5"
+          : "bg-transparent"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between py-4 px-4">
+        {/* LOGO */}
         <a href="#home" className="flex items-center gap-3">
           <img src={logo} alt="Absolute Warriors Gym" className="h-10 w-10 object-contain" />
           <span className="font-display text-xl font-bold tracking-wider text-foreground">
@@ -39,6 +59,7 @@ const Navbar = () => {
           </span>
         </a>
 
+        {/* DESKTOP NAV */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
@@ -49,14 +70,32 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <a
-            href="#plans"
-            className="bg-primary text-primary-foreground font-display text-sm tracking-wider uppercase px-6 py-2.5 rounded hover:bg-primary/90 transition-all duration-300 hover:shadow-lg hover:shadow-primary/30"
-          >
-            Join Now
-          </a>
+
+          {/* 🔥 USER LOGIC */}
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="text-white font-bold">
+                Welcome, {user.name}
+              </span>
+
+              <button
+                onClick={handleLogout}
+                className="bg-gray-700 px-3 py-1 rounded text-sm"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <a
+              href="/signup"
+              className="bg-primary text-primary-foreground font-display text-sm tracking-wider uppercase px-6 py-2.5 rounded hover:bg-primary/90 transition-all duration-300 hover:shadow-lg hover:shadow-primary/30"
+            >
+              Join Now
+            </a>
+          )}
         </div>
 
+        {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden text-foreground"
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -65,6 +104,7 @@ const Navbar = () => {
         </button>
       </div>
 
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -84,13 +124,30 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#plans"
-                onClick={() => setMobileOpen(false)}
-                className="bg-primary text-primary-foreground font-display tracking-wider uppercase px-8 py-3 rounded mt-2"
-              >
-                Join Now
-              </a>
+
+              {/* 🔥 MOBILE USER LOGIC */}
+              {user ? (
+                <>
+                  <span className="text-white font-bold">
+                    Welcome, {user.name}
+                  </span>
+
+                  <button
+                    onClick={handleLogout}
+                    className="bg-gray-700 px-6 py-2 rounded"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <a
+                  href="/signup"
+                  onClick={() => setMobileOpen(false)}
+                  className="bg-primary text-primary-foreground font-display tracking-wider uppercase px-8 py-3 rounded mt-2"
+                >
+                  Join Now
+                </a>
+              )}
             </div>
           </motion.div>
         )}

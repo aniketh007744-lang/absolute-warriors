@@ -10,20 +10,33 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
-const Index = () => (
-  <div className="min-h-screen bg-background">
-    <Navbar />
-    <HeroSection />
-    <AboutSection />
-    <FacilitiesSection />
-    <GallerySection />
-    <PlansSection />
-    <AuthSection />
-    <DashboardSection />
-    <ContactSection />
-    <Footer />
-    <WhatsAppButton />
-  </div>
-);
+const Index = () => {
+
+  // ✅ GET USER FROM LOCAL STORAGE
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+
+      {/* 🔥 MAIN CONTENT */}
+      <HeroSection />
+      <AboutSection />
+      <FacilitiesSection />
+      <GallerySection />
+      <PlansSection />
+
+      {/* 🔐 SHOW AUTH ONLY IF NOT LOGGED IN */}
+      {!user && <AuthSection />}
+
+      {/* 👤 SHOW DASHBOARD IF LOGGED IN */}
+      {user && <DashboardSection />}
+
+      <ContactSection />
+      <Footer />
+      <WhatsAppButton />
+    </div>
+  );
+};
 
 export default Index;
