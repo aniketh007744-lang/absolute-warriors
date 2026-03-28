@@ -18,7 +18,7 @@ export default function DashboardSection() {
       return;
     }
 
-    fetch(`http://localhost:5000/user/${user.id}`, {
+    fetch(`http://https://absolute-warriors-backend-1.onrender.com/user/${user.id}`, {
       headers: {
         Authorization: token,
       },

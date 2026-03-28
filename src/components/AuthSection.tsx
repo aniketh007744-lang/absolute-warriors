@@ -12,8 +12,8 @@ export default function AuthSection() {
     e.preventDefault();
 
     const url = isLogin
-      ? "http://localhost:5000/login"
-      : "http://localhost:5000/signup";
+      ? "http://https://absolute-warriors-backend-1.onrender.com/login"
+      : "http://https://absolute-warriors-backend-1.onrender.com/signup";
 
     try {
       const res = await fetch(url, {

@@ -13,7 +13,7 @@ export default function Profile() {
     }
 
     // 🔐 FETCH WITH TOKEN
-    fetch(`http://localhost:5000/user/${user.id}`, {
+    fetch(`http://https://absolute-warriors-backend-1.onrender.com/user/${user.id}`, {
       headers: {
         Authorization: token || ""
       }
@@ -86,7 +86,7 @@ export default function Profile() {
                 const token = localStorage.getItem("token");
 
                 try {
-                  const res = await fetch(`http://localhost:5000/pay/${user.id}`, {
+                  const res = await fetch(`http://https://absolute-warriors-backend-1.onrender.com/pay/${user.id}`, {
                     method: "PUT",
                     headers: {
                       Authorization: token || ""

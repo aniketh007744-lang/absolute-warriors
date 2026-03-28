@@ -12,7 +12,7 @@ export default function Signup() {
     try {
       console.log("Signup button clicked");
 
-      const res = await fetch("http://localhost:5000/signup", {
+      const res = await fetch("http://https://absolute-warriors-backend-1.onrender.com/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

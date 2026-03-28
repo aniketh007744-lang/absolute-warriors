@@ -8,8 +8,8 @@ export default function AdminPanel() {
 
   useEffect(() => {
     Promise.all([
-      fetch("http://localhost:5000/admin/users").then(res => res.json()),
-      fetch("http://localhost:5000/admin/leads").then(res => res.json())
+      fetch("http://https://absolute-warriors-backend-1.onrender.com/admin/users").then(res => res.json()),
+      fetch("http://https://absolute-warriors-backend-1.onrender.com/admin/leads").then(res => res.json())
     ])
       .then(([usersData, leadsData]) => {
         setUsers(usersData);
